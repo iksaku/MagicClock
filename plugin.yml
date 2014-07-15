@@ -1,0 +1,25 @@
+name: MagicClock
+main: MagicClock\Loader
+version: 1.0.0
+api: 1.0.0
+author: iksaku
+website: https://github.com/LegendOfMCPE/MagicClock
+
+permissions:
+    magicclock:
+        default: op
+        description: "All the permissions to use the MagicClock"
+        children:
+            magicclock.exempt:
+                default: op
+                description: "Prevent to be hidden by the MagicClock"
+            magicclock.command:
+                default: true
+                description: "Allow the usage of the MagicClock command"
+                children:
+                    magicclock.command.use:
+                        default: true
+                        description: "Toggle the Magic!"
+                    magicclock.command.get:
+                        default: true
+                        description: "Get the Magic Item!"

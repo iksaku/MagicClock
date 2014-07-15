@@ -1,0 +1,9 @@
+#This let you enable MagicClock when a player joins! ...or not...
+enableonjoin: true
+
+#This is the item that will be used has the MagicClock, default Clock (347)
+itemID: 347
+
+#Customize the "Hidding" and "Showing" messages
+hideplayersmessage: "All players have been hiden"
+showplayersmessage: "All players have been revelated"
