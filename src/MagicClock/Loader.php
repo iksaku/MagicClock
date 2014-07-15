@@ -20,10 +20,10 @@ class Loader extends PluginBase implements Listener{
     }
 
     private function checkConfig(){
+        $this->getConfig()->save();
         if(!is_bool($this->getConfig()->get("enableonjoin"))){
             $this->getConfig()->set(true);
         }
-        $this->getConfig()->save();
         return true;
     }
 
