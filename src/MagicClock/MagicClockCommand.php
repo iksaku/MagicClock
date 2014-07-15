@@ -28,6 +28,7 @@ class MagicClockCommand extends Command implements PluginIdentifiableCommand{
         }
         if(!$sender instanceof Player){
             $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
+            return false;
         }
         if(count($args) > 1){
             $sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
