@@ -5,5 +5,5 @@ enableonjoin: true
 itemID: 347
 
 #Customize the "Hidding" and "Showing" messages
-hideplayersmessage: "All players have been hiden"
+hideplayersmessage: "All players have been hiDden"
 showplayersmessage: "All players have been revelated"
