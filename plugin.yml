@@ -1,6 +1,6 @@
 name: MagicClock
 main: MagicClock\Loader
-version: 1.0.2
+version: 1.0.3
 api: 1.0.0
 author: iksaku
 website: https://github.com/LegendOfMCPE/MagicClock
