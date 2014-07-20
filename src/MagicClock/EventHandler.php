@@ -40,7 +40,7 @@ class EventHandler implements Listener{
         $victim = $event->getEntity();
         $issuer = $event->getDamager();
         if($victim instanceof Player && $issuer instanceof Player){
-            if($this->plugin->isMagicClockEnabled($issuer)){
+            if($this->plugin->isMagicClockEnabled($victim) || $this->plugin->isMagicClockEnabled($issuer)){
                 $event->setCancelled(true);
             }
         }
