@@ -30,7 +30,7 @@ class Loader extends PluginBase{
         if(!is_bool($this->getConfig()->get("enableonjoin"))){
             $this->getConfig()->set(true);
         }elseif(!is_numeric($this->getConfig()->get("itemID"))){
-            $this->getLogger()->alert(TextFormat::YELLOW . "[MagicClock] " . TextFormat::RED . "Unknown item given in the config.");
+            $this->getLogger()->alert(TextFormat::RED . "Unknown item given in the config.");
             $this->getConfig()->set("itemID", 347);
         }elseif(!is_bool($this->getConfig()->get("disablechat"))){
             $this->getConfig()->set("disablechat", false);
