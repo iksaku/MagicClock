@@ -1,8 +1,11 @@
 <?php
 namespace MagicClock;
 
+use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\Player;
@@ -25,11 +28,36 @@ class EventHandler implements Listener{
             $this->plugin->toggleMagicClock($player);
         }
         if(!$player->hasPermission("magicclock.exempt")){
-            foreach($this->plugin->getServer()->getOnlinePlayers() as $p){
+            foreach($player->getLevel()->getPlayers() as $p){
                 if($this->plugin->isMagicClockEnabled($p)){
                     $p->hidePlayer($player);
                 }
             }
+        }
+    }
+
+    /**
+     * @param EntityLevelChangeEvent $event
+     */
+    public function onPlayerLevelChange(EntityLevelChangeEvent $event){
+        $player = $event->getEntity();
+        $target = $event->getTarget();
+        if($player instanceof Player && !$player->hasPermission("magicclock.exempt")){
+            foreach($target->getPlayers() as $p){
+                if($this->plugin->isMagicClockEnabled($p)){
+                    $p->hidePlayer($player);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param PlayerChatEvent $event
+     */
+    public function onPlayerChat(PlayerChatEvent $event){
+        $player = $event->getPlayer();
+        if($this->plugin->isChatDisabled() && $this->plugin->isMagicClockEnabled($player)){
+            $event->setCancelled(true);
         }
     }
 
@@ -52,8 +80,21 @@ class EventHandler implements Listener{
     public function onBlockTouch(PlayerInteractEvent $event){
         $player = $event->getPlayer();
         $item = $event->getItem();
-        if($item->getID() == $this->plugin->getConfig()->get("itemID")){
+        if($this->plugin->isMagicClockEnabled($player) && $item->getID() == $this->plugin->getConfig()->get("itemID")){
             $this->plugin->toggleMagicClock($player);
+            $event->setCancelled(true);
         }
     }
-} 
+
+    /**
+     * @param BlockPlaceEvent $event
+     */
+    public function onBlockPlace(BlockPlaceEvent $event){
+        $player = $event->getPlayer();
+        $item = $event->getItem();
+        if($this->plugin->isMagicClockEnabled($player) && $item->getID() == $this->plugin->getConfig()->get("itemID")){
+            $this->plugin->toggleMagicClock($player);
+            $event->setCancelled(true);
+        }
+    }
+}

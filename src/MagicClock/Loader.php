@@ -2,6 +2,7 @@
 namespace MagicClock;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class Loader extends PluginBase{
     public function onEnable() {
@@ -13,9 +14,29 @@ class Loader extends PluginBase{
 
     private function checkConfig(){
         $this->getConfig()->save();
+
+        if(!$this->getConfig()->exists("enableonjoin")){
+            $this->getConfig()->set("enableonjoin", true);
+        }elseif(!$this->getConfig()->exists("itemID")){
+            $this->getConfig()->set("itemID", 347);
+        }elseif(!$this->getConfig()->exists("hideplayersmessage")){
+            $this->getConfig()->set("hideplayersmessage", "All players have been hidden");
+        }elseif(!$this->getConfig()->exists("showplayersmessage")){
+            $this->getConfig()->set("showplayersmessage", "All players have been revelated");
+        }elseif(!$this->getConfig()->exists("disablechat")){
+            $this->getConfig()->set("disablechat", false);
+        }
+
         if(!is_bool($this->getConfig()->get("enableonjoin"))){
             $this->getConfig()->set(true);
+        }elseif(!is_numeric($this->getConfig()->get("itemID"))){
+            $this->getLogger()->alert(TextFormat::YELLOW . "[MagicClock] " . TextFormat::RED . "Unknown item given in the config.");
+            $this->getConfig()->set("itemID", 347);
+        }elseif(!is_bool($this->getConfig()->get("disablechat"))){
+            $this->getConfig()->set("disablechat", false);
         }
+
+        $this->getConfig()->save();
         return true;
     }
 
@@ -39,24 +60,32 @@ class Loader extends PluginBase{
     public function toggleMagicClock(Player $player){
         if(!$this->isMagicClockEnabled($player)){
             $this->players[$player->getName()] = true;
-            foreach($this->getServer()->getOnlinePlayers() as $p){
+            foreach($player->getLevel()->getPlayers() as $p){
                 if(!$p->hasPermission("magicclock.exempt")){
                     $player->hidePlayer($p);
                 }
             }
         }else{
             $this->players[$player->getName()] = false;
-            foreach($this->getServer()->getOnlinePlayers() as $p){
+            foreach($player->getLevel()->getPlayers() as $p){
                 $player->showPlayer($p);
             }
         }
     }
 
     public function isMagicClockEnabled(Player $player){
-        if($this->players[$player->getName()] != false){
-            return true;
-        }else{
+        if($this->players[$player->getName()] === false){
             return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function isChatDisabled(){
+        if($this->getConfig()->get("disablechat") === false){
+            return false;
+        }else{
+            return true;
         }
     }
 }

@@ -5,5 +5,8 @@ enableonjoin: true
 itemID: 347
 
 #Customize the "Hidding" and "Showing" messages
-hideplayersmessage: "All players have been hiDden"
+hideplayersmessage: "All players have been hidden"
 showplayersmessage: "All players have been revelated"
+
+#Let you disable the chat for the players that have the MagicClock activated
+disablechat: false
