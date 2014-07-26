@@ -3,7 +3,7 @@ main: MagicClock\Loader
 version: 1.0.4
 api: 1.0.0
 author: iksaku
-website: https://github.com/LegendOfMCPE/MagicClock
+website: https://github.com/iksaku/MagicClock
 
 permissions:
     magicclock:
