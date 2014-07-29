@@ -44,7 +44,7 @@ class MagicClockCommand extends Command implements PluginIdentifiableCommand{
                 return true;
                 break;
             case 1:
-                switch($args[0]){
+                switch(strtolower($args[0])){
                     case "get":
                         if(!$sender->hasPermission("magicclock.command.get")){
                             $sender->sendMessage(TextFormat::RED . "You don't have permissions to use this command.");
