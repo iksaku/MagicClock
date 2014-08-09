@@ -85,13 +85,21 @@ class Loader extends PluginBase{
             $this->players[$player->getName()] = true;
             foreach($player->getLevel()->getPlayers() as $p){
                 if(!$p->hasPermission("magicclock.exempt")){
-                    $player->hidePlayer($p);
+                    if($this->essentialspe instanceof EssentialsPE && !$this->essentialspe->isVanished($p)){
+                        $player->hidePlayer($p);
+                    }else{
+                        $player->hidePlayer($p);
+                    }
                 }
             }
         }else{
             $this->players[$player->getName()] = false;
             foreach($player->getLevel()->getPlayers() as $p){
-                $player->showPlayer($p);
+                if($this->essentialspe instanceof EssentialsPE && !$this->essentialspe->isVanished($p)){
+                    $player->showPlayer($p);
+                }else{
+                    $player->showPlayer($p);
+                }
             }
         }
     }
