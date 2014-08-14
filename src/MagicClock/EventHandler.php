@@ -8,7 +8,6 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\Player;
 
 class EventHandler implements Listener{
@@ -96,18 +95,6 @@ class EventHandler implements Listener{
         if($this->plugin->isMagicClockEnabled($player) && $item->getID() == $this->plugin->getConfig()->get("itemID")){
             $this->plugin->toggleMagicClock($player);
             $event->setCancelled(true);
-        }
-    }
-
-    /**
-     * @param PluginDisableEvent $event
-     *
-     * @priority HIGHEST
-     */
-    public function onPluginDisable(PluginDisableEvent $event){
-        $plugin = $event->getPlugin();
-        if($plugin->getName() === "EssentialsPE"){
-            $this->plugin->essentialspe = false;
         }
     }
 }
