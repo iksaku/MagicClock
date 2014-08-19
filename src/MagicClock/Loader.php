@@ -1,36 +1,21 @@
 <?php
 namespace MagicClock;
-use MagicClock\OtherEvents\EssentialsPEEvents;
-use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use EssentialsPE\Loader as EssentialsPE;
 
 class Loader extends PluginBase{
-    public $essentialspe;
-
     public function onEnable() {
         @mkdir("plugins/MagicClock");
         $this->checkConfig();
         $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
         $this->getServer()->getCommandMap()->register("magicclock", new MagicClockCommand($this));
-
-        $ess = $this->getServer()->getPluginManager()->getPlugin("EssentialsPE");
-        if($ess instanceof Plugin && $ess->isEnabled()){
-            $this->essentialspe = new EssentialsPE();
-            $this->getServer()->getPluginManager()->registerEvents(new EssentialsPEEvents($this), $this);
-        }
     }
 
     public function onDisable(){
         foreach($this->getServer()->getOnlinePlayers() as $p){ //Player to show
             foreach($this->getServer()->getOnlinePlayers() as $players){ //Rest of players
-                if($this->essentialspe instanceof EssentialsPE && !$this->essentialspe->isVanished($p)){
-                    $players->showPlayer($p); //Show $p if isn't vanished by EssentialsPE
-                }else{
-                    $players->showPlayer($p); //Show $p
-                }
+                $players->showPlayer($p);
             }
         }
     }
@@ -85,21 +70,13 @@ class Loader extends PluginBase{
             $this->players[$player->getName()] = true;
             foreach($player->getLevel()->getPlayers() as $p){
                 if(!$p->hasPermission("magicclock.exempt")){
-                    if($this->essentialspe instanceof EssentialsPE && !$this->essentialspe->isVanished($p)){
-                        $player->hidePlayer($p);
-                    }else{
-                        $player->hidePlayer($p);
-                    }
+                    $player->hidePlayer($p);
                 }
             }
         }else{
             $this->players[$player->getName()] = false;
             foreach($player->getLevel()->getPlayers() as $p){
-                if($this->essentialspe instanceof EssentialsPE && !$this->essentialspe->isVanished($p)){
-                    $player->showPlayer($p);
-                }else{
-                    $player->showPlayer($p);
-                }
+                $player->showPlayer($p);
             }
         }
     }
