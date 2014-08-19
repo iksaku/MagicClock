@@ -1,6 +1,6 @@
 name: MagicClock
 main: MagicClock\Loader
-version: 1.0.4
+version: 1.0.5
 api: 1.0.0
 author: iksaku
 website: https://github.com/iksaku/MagicClock
@@ -13,6 +13,9 @@ permissions:
             magicclock.exempt:
                 default: op
                 description: "Prevent to be hidden by the MagicClock"
+            magicclock.canchat:
+                default: op
+                description: "Allow the player to chat if chat is disabled"
             magicclock.command:
                 default: true
                 description: "Allow the usage of the MagicClock command"

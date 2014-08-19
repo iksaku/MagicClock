@@ -39,7 +39,7 @@ class EventHandler implements Listener{
     /**
      * @param EntityLevelChangeEvent $event
      */
-    public function onPlayerLevelChange(EntityLevelChangeEvent $event){
+    public function onEntityLevelChange(EntityLevelChangeEvent $event){
         $player = $event->getEntity();
         $target = $event->getTarget();
         if($player instanceof Player && !$player->hasPermission("magicclock.exempt")){
@@ -56,7 +56,7 @@ class EventHandler implements Listener{
      */
     public function onPlayerChat(PlayerChatEvent $event){
         $player = $event->getPlayer();
-        if($this->plugin->isChatDisabled() && $this->plugin->isMagicClockEnabled($player)){
+        if($this->plugin->isChatDisabled() && $this->plugin->isMagicClockEnabled($player) && !$player->hasPermission("magicclock.canchat")){
             $event->setCancelled(true);
         }
     }
@@ -80,9 +80,9 @@ class EventHandler implements Listener{
     public function onBlockTouch(PlayerInteractEvent $event){
         $player = $event->getPlayer();
         $item = $event->getItem();
-        if($this->plugin->isMagicClockEnabled($player) && $item->getID() == $this->plugin->getConfig()->get("itemID")){
-            $this->plugin->toggleMagicClock($player);
+        if($item->getID() == $this->plugin->getConfig()->get("itemID")){
             $event->setCancelled(true);
+            $this->plugin->toggleMagicClock($player);
         }
     }
 
@@ -92,9 +92,9 @@ class EventHandler implements Listener{
     public function onBlockPlace(BlockPlaceEvent $event){
         $player = $event->getPlayer();
         $item = $event->getItem();
-        if($this->plugin->isMagicClockEnabled($player) && $item->getID() == $this->plugin->getConfig()->get("itemID")){
-            $this->plugin->toggleMagicClock($player);
+        if($item->getID() == $this->plugin->getConfig()->get("itemID")){
             $event->setCancelled(true);
+            $this->plugin->toggleMagicClock($player);
         }
     }
 }

@@ -2,7 +2,6 @@
 namespace MagicClock;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
-use pocketmine\utils\TextFormat;
 
 class Loader extends PluginBase{
     public function onEnable() {
@@ -22,30 +21,25 @@ class Loader extends PluginBase{
 
     private function checkConfig(){
         $this->getConfig()->save();
-
-        if(!$this->getConfig()->exists("enableonjoin")){
-            $this->getConfig()->set("enableonjoin", true);
-        }elseif(!$this->getConfig()->exists("itemID")){
-            $this->getConfig()->set("itemID", 347);
-        }elseif(!$this->getConfig()->exists("hideplayersmessage")){
-            $this->getConfig()->set("hideplayersmessage", "All players have been hidden");
-        }elseif(!$this->getConfig()->exists("showplayersmessage")){
-            $this->getConfig()->set("showplayersmessage", "All players have been revelated");
-        }elseif(!$this->getConfig()->exists("disablechat")){
-            $this->getConfig()->set("disablechat", false);
+        $cfg = $this->getConfig();
+        if(!$cfg->exists("enableonjoin") || !is_bool($cfg->get("enableonjoin"))){
+            $cfg->set("enableonjoin", true);
+        }
+        if(!$cfg->exists("itemID") || !is_numeric($cfg->get("itemID"))){
+            $cfg->set("itemID", 347);
+        }
+        if(!$cfg->exists("hideplayersmessage")){
+            $cfg->set("hideplayersmessage", "All players have been hidden");
+        }
+        if(!$cfg->exists("showplayersmessage")){
+            $cfg->set("showplayersmessage", "All players have been revelated");
+        }
+        if(!$cfg->exists("disablechat") || !is_bool($cfg->get("disablechat"))){
+            $cfg->set("disablechat", false);
         }
 
-        if(!is_bool($this->getConfig()->get("enableonjoin"))){
-            $this->getConfig()->set(true);
-        }elseif(!is_numeric($this->getConfig()->get("itemID"))){
-            $this->getLogger()->alert(TextFormat::RED . "Unknown item given in the config.");
-            $this->getConfig()->set("itemID", 347);
-        }elseif(!is_bool($this->getConfig()->get("disablechat"))){
-            $this->getConfig()->set("disablechat", false);
-        }
-
-        $this->getConfig()->save();
-        return true;
+        $cfg->save();
+        $cfg->reload();
     }
 
     /*
@@ -82,18 +76,10 @@ class Loader extends PluginBase{
     }
 
     public function isMagicClockEnabled(Player $player){
-        if($this->players[$player->getName()] === false){
-            return false;
-        }else{
-            return true;
-        }
+        return $this->players[$player->getName()];
     }
 
     public function isChatDisabled(){
-        if($this->getConfig()->get("disablechat") === false){
-            return false;
-        }else{
-            return true;
-        }
+        return $this->getConfig()->get("disablechat");
     }
 }

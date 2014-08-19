@@ -30,9 +30,6 @@ class MagicClockCommand extends Command implements PluginIdentifiableCommand{
             $sender->sendMessage(TextFormat::RED . "Please run this command in-game");
             return false;
         }
-        if(count($args) > 1){
-            $sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
-        }
         switch(count($args)){
             case 0:
                 $this->plugin->toggleMagicClock($sender);
@@ -41,7 +38,6 @@ class MagicClockCommand extends Command implements PluginIdentifiableCommand{
                 }else{
                     $sender->sendMessage(TextFormat::YELLOW . $this->plugin->getConfig()->get("hideplayersmessage"));
                 }
-                return true;
                 break;
             case 1:
                 switch(strtolower($args[0])){
@@ -58,7 +54,9 @@ class MagicClockCommand extends Command implements PluginIdentifiableCommand{
                         $sender->sendMessage(TextFormat::RED . "Usage: /magicclock [get]");
                         break;
                 }
-                return true;
+                break;
+            default:
+                $sender->sendMessage(TextFormat::RED . $this->getUsage());
                 break;
         }
         return true;
