@@ -14,7 +14,7 @@ class MagicClockCommand extends Command implements PluginIdentifiableCommand{
 
     public function __construct(Loader $plugin){
         parent::__construct("magicclock", "Toggle the MagicClock", "/magicclock [get]", ["mcclock"]);
-        $this->setPermission("magicclock.command.use");
+        $this->setPermission("magicclock.command");
         $this->plugin = $plugin;
     }
 

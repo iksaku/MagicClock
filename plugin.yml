@@ -1,6 +1,6 @@
 name: MagicClock
 main: MagicClock\Loader
-version: 1.0.5
+version: 1.0.6
 api: 1.0.0
 author: iksaku
 website: https://github.com/iksaku/MagicClock
@@ -20,9 +20,6 @@ permissions:
                 default: true
                 description: "Allow the usage of the MagicClock command"
                 children:
-                    magicclock.command.use:
-                        default: true
-                        description: "Toggle the Magic!"
                     magicclock.command.get:
                         default: true
                         description: "Get the Magic Item!"

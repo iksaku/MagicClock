@@ -64,10 +64,10 @@ class EventHandler implements Listener{
     /**
      * @param EntityDamageByEntityEvent $event
      */
-    public function onPlayerDamageByPlayer(EntityDamageByEntityEvent $event){
+    public function onEntityDamageByEntity(EntityDamageByEntityEvent $event){
         $victim = $event->getEntity();
         $issuer = $event->getDamager();
-        if($victim instanceof Player && $issuer instanceof Player){
+        if($event->getEventName() === "EntityDamageByEntityEvent" && ($victim instanceof Player && $issuer instanceof Player)){
             if($this->plugin->isMagicClockEnabled($victim) || $this->plugin->isMagicClockEnabled($issuer)){
                 $event->setCancelled(true);
             }
