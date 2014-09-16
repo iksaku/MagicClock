@@ -5,7 +5,7 @@ use pocketmine\Player;
 
 class Loader extends PluginBase{
     public function onEnable() {
-        @mkdir("plugins/MagicClock");
+        @mkdir($this->getDataFolder());
         $this->checkConfig();
         $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
         $this->getServer()->getCommandMap()->register("magicclock", new MagicClockCommand($this));
