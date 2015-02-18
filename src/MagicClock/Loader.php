@@ -6,6 +6,7 @@ use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
 use EssentialsPE\Loader as EssentialsPE;
+use pocketmine\utils\TextFormat;
 
 class Loader extends PluginBase{
     public function onEnable(){
@@ -16,6 +17,7 @@ class Loader extends PluginBase{
         $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
         if($this->getEsspeAPI() !== false){
             $this->getServer()->getPluginManager()->registerEvents(new EssentialsPEEvents($this), $this);
+            $this->getServer()->getLogger()->debug(TextFormat::GREEN . "Enabled EssentialsPE support for MagicClock!");
         }
         $this->getServer()->getCommandMap()->register("magicclock", new MagicClockCommand($this));
     }
@@ -79,6 +81,7 @@ class Loader extends PluginBase{
     public $players = [];
 
     public function toggleMagicClock(Player $player){
+        $this->getLogger()->debug("Hiden");
         if(!$this->isMagicClockEnabled($player)){ // Enable MagicClock
             $this->players[$player->getName()] = true;
             foreach($player->getLevel()->getPlayers() as $p){

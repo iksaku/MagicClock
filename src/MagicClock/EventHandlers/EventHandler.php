@@ -10,8 +10,6 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\server\DataPacketReceiveEvent;
-use pocketmine\network\protocol\UseItemPacket;
 use pocketmine\Player;
 
 class EventHandler implements Listener{
@@ -85,7 +83,7 @@ class EventHandler implements Listener{
      * @param PlayerInteractEvent $event
      */
     public function onBlockTouch(PlayerInteractEvent $event){
-        if($event->getItem()->getID() == $this->plugin->getConfig()->get("itemID")){
+        if($event->getItem()->getID() === $this->plugin->getConfig()->get("itemID")){
             $event->setCancelled(true);
             $this->plugin->toggleMagicClock($event->getPlayer());
         }
@@ -95,18 +93,7 @@ class EventHandler implements Listener{
      * @param BlockPlaceEvent $event
      */
     public function onBlockPlace(BlockPlaceEvent $event){
-        if($event->getItem()->getID() == $this->plugin->getConfig()->get("itemID")){
-            $event->setCancelled(true);
-            $this->plugin->toggleMagicClock($event->getPlayer());
-        }
-    }
-
-    /**
-     * @param DataPacketReceiveEvent $event
-     */
-    public function onDataReceive(DataPacketReceiveEvent $event){
-        $packet = $event->getPacket();
-        if(($packet instanceof UseItemPacket && $packet->face === 0xff) && $packet->item == $this->plugin->getConfig()->get("itemID")){
+        if($event->getItem()->getID() === $this->plugin->getConfig()->get("itemID")){
             $event->setCancelled(true);
             $this->plugin->toggleMagicClock($event->getPlayer());
         }
