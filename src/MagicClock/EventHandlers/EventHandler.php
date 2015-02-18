@@ -1,6 +1,7 @@
 <?php
-namespace MagicClock;
+namespace MagicClock\EventHandlers;
 
+use MagicClock\Loader;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;

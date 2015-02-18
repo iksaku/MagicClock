@@ -1,5 +1,7 @@
 <?php
 namespace MagicClock;
+use MagicClock\EventHandlers\EssentialsPEEvents;
+use MagicClock\EventHandlers\EventHandler;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
@@ -12,6 +14,9 @@ class Loader extends PluginBase{
         }
         $this->checkConfig();
         $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
+        if($this->getEsspeAPI() !== false){
+            $this->getServer()->getPluginManager()->registerEvents(new EssentialsPEEvents($this), $this);
+        }
         $this->getServer()->getCommandMap()->register("magicclock", new MagicClockCommand($this));
     }
 
