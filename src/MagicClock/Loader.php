@@ -33,8 +33,16 @@ class Loader extends PluginBase{
     }
 
     private function checkConfig(){
-        $this->saveDefaultConfig();
+        if(!file_exists($this->getDataFolder() . "config.yml")){
+            $this->saveDefaultConfig();
+        }
         $cfg = $this->getConfig();
+        if(!$cfg->exists("version") || $cfg->get("version") !== "1.0.7"){
+            $this->getLogger()->debug(TextFormat::RED . "An invalid config file was found, generating a new one...");
+            unlink($this->getDataFolder() . "config.yml");
+            $this->saveDefaultConfig();
+        }
+
         if(!$cfg->exists("enableonjoin") || !is_bool($cfg->get("enableonjoin"))){
             $cfg->set("enableonjoin", true);
         }
