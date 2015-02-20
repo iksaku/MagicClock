@@ -80,17 +80,23 @@ class Loader extends PluginBase{
 
     public $players = [];
 
+    /**
+     * @param Player $player
+     */
     public function toggleMagicClock(Player $player){
-        $this->getLogger()->debug("Hiden");
+        $this->getLogger()->debug("Hidden");
         if(!$this->isMagicClockEnabled($player)){ // Enable MagicClock
-            $this->players[$player->getName()] = true;
+            $this->players[] = $player->getName();
             foreach($player->getLevel()->getPlayers() as $p){
                 if(!$p->hasPermission("magicclock.exempt")){
                     $player->hidePlayer($p);
                 }
             }
         }else{ // Disable MagicClock
-            $this->players[$player->getName()] = false;
+            if(in_array($player->getName(), $this->players)){
+                $this->players[$player->getName()] = false;
+                unset($this->players[$player->getName()]);
+            }
             foreach($player->getLevel()->getPlayers() as $p){
                 if(!$this->getEsspeAPI() || ($this->getEsspeAPI() !== false && !$this->getEsspeAPI()->isVanished($p))){
                     $player->showPlayer($p);
@@ -99,10 +105,17 @@ class Loader extends PluginBase{
         }
     }
 
+    /**
+     * @param Player $player
+     * @return bool
+     */
     public function isMagicClockEnabled(Player $player){
-        return $this->players[$player->getName()];
+        return in_array($player->getName(), $this->players);
     }
 
+    /**
+     * @return bool
+     */
     public function isChatDisabled(){
         return $this->getConfig()->get("disablechat");
     }
