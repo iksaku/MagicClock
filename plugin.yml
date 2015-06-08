@@ -1,11 +1,12 @@
 name: MagicClock
 main: MagicClock\Loader
-version: 1.0.7
+version: 1.0.8
 api: 1.0.0
 author: iksaku
 website: https://github.com/iksaku/MagicClock
 softdepend:
  - EssentialsPE
+ - VanishNP
 
 permissions:
     magicclock:

@@ -2,31 +2,44 @@
 namespace MagicClock;
 use MagicClock\EventHandlers\EssentialsPEEvents;
 use MagicClock\EventHandlers\EventHandler;
-use pocketmine\plugin\Plugin;
+use MagicClock\EventHandlers\VanishNPEvents;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
 use EssentialsPE\Loader as EssentialsPE;
+use VanishNP\Loader as VanishNP;
 use pocketmine\utils\TextFormat;
 
 class Loader extends PluginBase{
+    /** @var null|EssentialsPE */
+    private $essentialspe;
+    /** @var null|VanishNP */
+    private $vanishnp;
+
     public function onEnable(){
         if(!is_dir($this->getDataFolder())){
             mkdir($this->getDataFolder());
         }
         $this->checkConfig();
         $this->getServer()->getPluginManager()->registerEvents(new EventHandler($this), $this);
-        if($this->getEsspeAPI() !== false){
+
+        $this->essentialspe = $this->getServer()->getPluginManager()->getPlugin("EssentialsPE");
+        $this->vanishnp = $this->getServer()->getPluginManager()->getPlugin("VanishNP");
+        if($this->getEssentialsPEAPI() !== false){
             $this->getServer()->getPluginManager()->registerEvents(new EssentialsPEEvents($this), $this);
-            $this->getServer()->getLogger()->debug(TextFormat::GREEN . "Enabled EssentialsPE support for MagicClock!");
+            $this->getServer()->getLogger()->info(TextFormat::YELLOW . "Enabled " . TextFormat::GREEN . "EssentialsPE" . TextFormat::YELLOW . " plugin support for " . TextFormat::RED . "MagicClock");
+        }elseif($this->getVanishNPAPI() !== false){
+            $this->getServer()->getPluginManager()->registerEvents(new VanishNPEvents($this), $this);
+            $this->getServer()->getLogger()->info(TextFormat::YELLOW . "Enabled " . TextFormat::GREEN . "EssentialsPE" . TextFormat::YELLOW . " plugin support for " . TextFormat::RED . "MagicClock");
         }
+
         $this->getServer()->getCommandMap()->register("magicclock", new MagicClockCommand($this));
     }
 
     public function onDisable(){
         foreach($this->getServer()->getOnlinePlayers() as $p){ //Player to show
-            foreach($this->getServer()->getOnlinePlayers() as $players){ //Rest of players
-                if(!$this->getEsspeAPI() || ($this->getEsspeAPI() !== false && !$this->getEsspeAPI()->isVanished($players))){
-                    $players->showPlayer($p);
+            foreach($this->getServer()->getOnlinePlayers() as $player){ //Rest of players
+                if(!$this->getEssentialsPEAPI() || (($this->getEssentialsPEAPI() !== false && !$this->getEssentialsPEAPI()->isVanished($player)) || ($this->getVanishNPAPI() !== false && !$this->getVanishNPAPI()->isVanished($player)))){
+                    $player->showPlayer($p);
                 }
             }
         }
@@ -63,12 +76,21 @@ class Loader extends PluginBase{
     /**
      * @return bool|EssentialsPE
      */
-    private function getEsspeAPI(){
-        $e = $this->getServer()->getPluginManager()->getPlugin("EssentialsPE");
-        if($e instanceof Plugin and $e->isEnabled()){
-            return $e;
+    private function getEssentialsPEAPI(){
+        if($this->essentialspe === null){
+            return false;
         }
-        return false;
+        return $this->essentialspe;
+    }
+
+    /**
+     * @return bool|VanishNP
+     */
+    private function getVanishNPAPI(){
+        if($this->vanishnp === null){
+            return false;
+        }
+        return $this->vanishnp;
     }
 
     /*
@@ -92,7 +114,6 @@ class Loader extends PluginBase{
      * @param Player $player
      */
     public function toggleMagicClock(Player $player){
-        $this->getLogger()->debug("Hidden");
         if(!$this->isMagicClockEnabled($player)){ // Enable MagicClock
             $this->players[] = $player->getName();
             foreach($player->getLevel()->getPlayers() as $p){
@@ -106,7 +127,7 @@ class Loader extends PluginBase{
                 unset($this->players[$player->getName()]);
             }
             foreach($player->getLevel()->getPlayers() as $p){
-                if(!$this->getEsspeAPI() || ($this->getEsspeAPI() !== false && !$this->getEsspeAPI()->isVanished($p))){
+                if(!$this->getEssentialsPEAPI() || (($this->getEssentialsPEAPI() !== false && !$this->getEssentialsPEAPI()->isVanished($player)) || ($this->getVanishNPAPI() !== false && !$this->getVanishNPAPI()->isVanished($player)))){
                     $player->showPlayer($p);
                 }
             }

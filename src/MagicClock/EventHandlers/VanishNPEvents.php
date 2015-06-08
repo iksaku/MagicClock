@@ -1,13 +1,13 @@
 <?php
 namespace MagicClock\EventHandlers;
 
-use EssentialsPE\Events\PlayerVanishEvent;
 use MagicClock\Loader;
 use pocketmine\event\Listener;
+use VanishNP\PlayerVanishEvent;
 
-class EssentialsPEEvents implements Listener{
-    /** @var Loader  */
-    public $plugin;
+class VanishNPEvents implements Listener{
+    /** @var Loader */
+    private $plugin;
 
     public function __construct(Loader $plugin){
         $this->plugin = $plugin;
@@ -28,4 +28,5 @@ class EssentialsPEEvents implements Listener{
             }
         }
     }
+
 }
