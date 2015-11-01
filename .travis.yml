@@ -1,4 +1,4 @@
 language: php
 sudo: false
 
-script: ./travis/script.php
+script: php ./travis/script.php
