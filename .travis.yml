@@ -1,4 +1,7 @@
 language: php
+php:
+  - 5.6
+
 sudo: false
 
 script: php ./travis/script.php
